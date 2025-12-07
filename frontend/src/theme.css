@@ -29,12 +29,55 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: 0.55rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  cursor: pointer;
+}
+
+.pill.active {
+  background: white;
+  color: var(--royal-purple);
+}
+
 .card {
   background: var(--card);
   padding: 1rem;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   margin-bottom: 1rem;
+}
+
+.landing {
+  border: 1px dashed rgba(107, 47, 155, 0.2);
+}
+
+.landing-content {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
 }
 
 .upload-form {
@@ -192,18 +235,16 @@ button.secondary:hover {
   margin-bottom: 0.5rem;
 }
 
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 input {
   padding: 0.5rem;
   border-radius: 8px;
   border: 1px solid #d6c9b8;
-}
-
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  .upload-form {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
