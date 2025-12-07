@@ -16,8 +16,11 @@ from app.services import list_invoices, retryable_process
 logging.basicConfig(level=logging.INFO)
 settings = get_settings()
 
-ensure_schema()
 app = FastAPI(title="Invoice Parser API")
+
+# Ensure tables exist after all models are loaded so the schema includes
+# every column (e.g., billing period fields).
+ensure_schema()
 
 
 def serialize_invoice(invoice: Invoices) -> InvoiceSchema:
