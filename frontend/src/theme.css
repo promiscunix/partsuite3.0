@@ -206,6 +206,67 @@ button.secondary:hover {
   color: var(--burnt-orange);
 }
 
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+
+.insight-card {
+  background: white;
+  border: 1px solid #eadfd4;
+  border-radius: 12px;
+  padding: 0.75rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+.insight-card h4 {
+  margin: 0 0 0.4rem;
+}
+
+.data-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem 0.6rem;
+}
+
+.data-grid dt {
+  font-weight: 600;
+  color: #4a413c;
+}
+
+.data-grid dd {
+  margin: 0;
+  color: #6a5f58;
+}
+
+.parts-list {
+  list-style: decimal;
+  padding-left: 1rem;
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.parts-list li {
+  background: rgba(107, 47, 155, 0.04);
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(107, 47, 155, 0.08);
+}
+
+.summary-card {
+  background: linear-gradient(135deg, rgba(204, 85, 0, 0.08), rgba(107, 47, 155, 0.08));
+}
+
+.summary-block {
+  background: white;
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  border: 1px dashed rgba(204, 85, 0, 0.3);
+}
+
 .lines {
   width: 100%;
   border-collapse: collapse;
