@@ -20,6 +20,11 @@ def ensure_schema():
     destructive behavior on non-SQLite databases.
     """
 
+    # Ensure all ORM models are registered on ``Base.metadata`` even if this
+    # function is called before ``app.main`` imports them. This prevents a
+    # partially populated schema when new columns are added in future merges.
+    import app.models  # noqa: F401
+
     inspector = inspect(engine)
     # Only auto-recreate the schema for SQLite dev environments.
     if engine.url.get_backend_name() == "sqlite":
