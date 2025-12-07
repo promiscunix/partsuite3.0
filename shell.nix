@@ -10,6 +10,7 @@ let
     pdfminer-six
     pypdf
     python-multipart
+    httpx
     pytest
   ]);
   node = pkgs.nodejs_20;
