@@ -229,6 +229,22 @@ button.secondary:hover {
   border-radius: 8px;
 }
 
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.subcard {
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.invoice-view h4 {
+  margin: 0;
+}
+
 .toolbar {
   display: flex;
   justify-content: space-between;
