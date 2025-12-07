@@ -18,13 +18,20 @@ def is_fca_invoice(text: str) -> bool:
 
 
 def extract_text_from_pdf(data: bytes) -> str:
+    parsed_text = ""
     try:
-        return extract_text(BytesIO(data)) or ""
+        parsed_text = extract_text(BytesIO(data)) or ""
     except Exception:
-        try:
-            return data.decode("utf-8", errors="ignore")
-        except Exception:
-            return ""
+        parsed_text = ""
+
+    try:
+        decoded_text = data.decode("utf-8", errors="ignore")
+    except Exception:
+        decoded_text = ""
+
+    # Prefer the richer of the two attempts so that plain-text fixtures and
+    # PDFs both produce usable content.
+    return parsed_text if len(parsed_text.strip()) >= len(decoded_text.strip()) else decoded_text
 
 
 def segment_pages(text: str) -> List[str]:
@@ -167,12 +174,17 @@ def parse_pdf_bytes(data: bytes) -> List[Invoice]:
 def split_invoices(text: str) -> List[str]:
     chunks: List[str] = []
     current: List[str] = []
+    has_invoice_header = False
+
     for line in text.splitlines():
-        if re.search(r"Invoice\s*#", line) and current:
+        is_invoice_header = bool(re.search(r"Invoice\s*#", line))
+        if is_invoice_header and has_invoice_header:
             chunks.append("\n".join(current))
             current = [line]
         else:
             current.append(line)
+        has_invoice_header = has_invoice_header or is_invoice_header
+
     if current:
         chunks.append("\n".join(current))
     return chunks or [text]

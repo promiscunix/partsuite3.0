@@ -1,29 +1,25 @@
 from datetime import date, datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
-class GLAllocation(BaseModel):
+class ORMModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+
+class GLAllocation(ORMModel):
     id: int | None = None
     account_code: str
     amount: float
     memo: Optional[str] = None
 
-    class Config:
-        orm_mode = True
-
-
-class Charge(BaseModel):
+class Charge(ORMModel):
     id: int | None = None
     type: str
     amount: float
 
-    class Config:
-        orm_mode = True
-
-
-class InvoiceLine(BaseModel):
+class InvoiceLine(ORMModel):
     id: int | None = None
     part_number: str
     description: Optional[str] = None
@@ -32,20 +28,12 @@ class InvoiceLine(BaseModel):
     extended_cost: Optional[float] = None
     part_id: Optional[int] = None
 
-    class Config:
-        orm_mode = True
-
-
-class InvoicePage(BaseModel):
+class InvoicePage(ORMModel):
     page_number: int
     text_content: str
     is_summary: bool = False
 
-    class Config:
-        orm_mode = True
-
-
-class Invoice(BaseModel):
+class Invoice(ORMModel):
     id: int | None = None
     invoice_number: Optional[str] = None
     invoice_date: Optional[date] = None
@@ -63,11 +51,7 @@ class Invoice(BaseModel):
     charges: List[Charge] = Field(default_factory=list)
     allocations: List[GLAllocation] = Field(default_factory=list)
 
-    class Config:
-        orm_mode = True
-
-
-class FileRecord(BaseModel):
+class FileRecord(ORMModel):
     id: int
     filename: str
     original_path: str
@@ -75,11 +59,7 @@ class FileRecord(BaseModel):
     uploaded_at: datetime
     invoice: Optional[Invoice]
 
-    class Config:
-        orm_mode = True
-
-
-class UploadResponse(BaseModel):
+class UploadResponse(ORMModel):
     invoice: Invoice
     file: FileRecord
 
