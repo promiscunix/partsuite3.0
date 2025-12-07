@@ -10,6 +10,12 @@ A Nix shell is provided with Python 3.11, FastAPI, pdfminer.six, pypdf, SQLAlche
 nix-shell
 ```
 
+With flakes enabled you can enter the same environment via:
+
+```bash
+nix develop
+```
+
 ## Backend
 
 Run the API:
