@@ -1,0 +1,155 @@
+:root {
+  --burnt-orange: #cc5500;
+  --royal-purple: #6b2f9b;
+  --mocha: #837060;
+  --background: #f8f4ef;
+  --card: #fffaf5;
+  --text: #1f1b24;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(120deg, var(--background), #f3e8ff);
+  color: var(--text);
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.hero {
+  background: linear-gradient(90deg, var(--burnt-orange), var(--royal-purple));
+  color: white;
+  padding: 1.5rem;
+  border-radius: 14px;
+  margin-bottom: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card {
+  background: var(--card);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1rem;
+}
+
+.upload-form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+button.primary {
+  background: var(--burnt-orange);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button.primary:hover {
+  background: #e66d17;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list li {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e9dfd5;
+  cursor: pointer;
+}
+
+.list li:last-child {
+  border-bottom: none;
+}
+
+.list li.active {
+  background: rgba(107, 47, 155, 0.1);
+}
+
+.title {
+  font-weight: 700;
+}
+
+.meta {
+  font-size: 0.9rem;
+  color: #5f5650;
+}
+
+.muted {
+  color: #7a6e65;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+  background: rgba(131, 112, 96, 0.08);
+  padding: 0.6rem;
+  border-radius: 8px;
+}
+
+.summary .total {
+  font-weight: 700;
+  color: var(--burnt-orange);
+}
+
+.lines {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lines th,
+.lines td {
+  border-bottom: 1px solid #e9dfd5;
+  padding: 0.35rem;
+  text-align: left;
+}
+
+.toggle input {
+  margin-right: 0.4rem;
+}
+
+.badge.warning {
+  background: rgba(204, 85, 0, 0.1);
+  color: var(--burnt-orange);
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #d6c9b8;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .upload-form {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
