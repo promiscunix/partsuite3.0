@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
-from app.database import Base, engine, get_db
+from app.database import Base, engine, ensure_schema, get_db
 from app.models import Files, Invoices, Parts
 from app.schemas import FileRecord, Invoice as InvoiceSchema, ParseTrigger, UploadResponse
 from app.services import list_invoices, retryable_process
@@ -16,7 +16,7 @@ from app.services import list_invoices, retryable_process
 logging.basicConfig(level=logging.INFO)
 settings = get_settings()
 
-Base.metadata.create_all(bind=engine)
+ensure_schema()
 app = FastAPI(title="Invoice Parser API")
 
 
