@@ -45,13 +45,15 @@ The `frontend` folder contains a Vite/React interface with:
 - Parsed invoice list and detail view with totals and line items.
 - "Not received" report filtered by part number.
 
-Install dependencies and run:
+Install dependencies and run (with the API running on http://localhost:8000):
 
 ```bash
 cd frontend
 pnpm install
 pnpm dev
 ```
+
+Once the dev server starts, open the UI at http://localhost:5173. From the home screen, choose **Review Invoices** to see the invoice table and open the detail view with the highlights, first five part numbers, and last-page summary. The frontend defaults to the backend at `http://localhost:8000`; set `VITE_API_BASE` if your API runs elsewhere.
 
 ## Testing
 
