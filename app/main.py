@@ -40,6 +40,26 @@ def upload_files(files: List[UploadFile] = File(...), db: Session = Depends(get_
     return results
 
 
+@app.get("/")
+def root() -> dict[str, str]:
+    """Basic landing endpoint to indicate the API is running."""
+
+    return {
+        "message": "Invoice Parser API is running. Use POST /upload to submit files.",
+        "docs": "/docs",
+    }
+
+
+@app.get("/upload")
+def upload_instructions() -> dict[str, str]:
+    """Explain how to use the upload endpoint when accessed via GET."""
+
+    return {
+        "detail": "Upload PDFs with a multipart/form-data POST request to /upload.",
+        "example": "curl -F 'files=@invoice.pdf' http://localhost:8000/upload",
+    }
+
+
 @app.post("/parse/trigger", response_model=List[InvoiceSchema])
 def trigger_parse(body: ParseTrigger, db: Session = Depends(get_db)):
     invoices: List[InvoiceSchema] = []
