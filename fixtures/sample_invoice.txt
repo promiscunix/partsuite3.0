@@ -1,0 +1,17 @@
+FCA US LLC
+Invoice # 12345
+Date: 01/15/2024
+PO #: PO-7788
+Vendor: FCA Vendor
+Customer: Sample Plant
+
+Line Items
+ABC123 2 10.00 20.00
+XYZ789 1 5.00 5.00
+
+Freight: 12.50
+Tax: 2.50
+Total: 40.00
+
+GL 5000 32.50 Materials
+Summary Page
