@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import List
 
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
@@ -18,6 +20,22 @@ settings = get_settings()
 
 ensure_schema()
 app = FastAPI(title="Invoice Parser API")
+
+FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+FRONTEND_INDEX = FRONTEND_DIST / "index.html"
+
+if (FRONTEND_DIST / "assets").exists():
+    app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets")
+
+
+@app.get("/favicon.svg", include_in_schema=False)
+def favicon() -> FileResponse:
+    """Serve the frontend favicon when a build exists."""
+
+    icon_path = FRONTEND_DIST / "favicon.svg"
+    if icon_path.exists():
+        return FileResponse(icon_path)
+    raise HTTPException(status_code=404, detail="Favicon not found.")
 
 
 def serialize_invoice(invoice: Invoices) -> InvoiceSchema:
@@ -125,6 +143,7 @@ def root() -> str:
           <p>Upload PDFs to extract invoice details or open the React UI to review parsed results.</p>
           <div class=\"links\">
             <a href=\"/upload-ui\">Upload PDFs in your browser</a>
+            <a href=\"/ui\">Open the React invoice UI</a>
             <a href=\"/docs\">Explore interactive API docs</a>
             <a href=\"/upload\">POST /upload endpoint details</a>
             <a href=\"/invoices\">See parsed invoices</a>
@@ -132,12 +151,25 @@ def root() -> str:
           <ul>
             <li>Use <strong>POST /upload</strong> with multipart form data to submit one or more PDF invoices.</li>
             <li>Re-run parsing for stored files with <strong>POST /parse/trigger</strong>.</li>
-            <li>Use the Vite frontend (pnpm dev) for the full landing experience.</li>
+            <li>Use the Vite frontend (pnpm dev) for the full landing experience or the built bundle at /ui when available.</li>
           </ul>
         </main>
       </body>
     </html>
     """
+
+
+@app.get("/ui", response_class=HTMLResponse)
+def spa_ui() -> HTMLResponse:
+    """Serve the built React UI when available (uvicorn-friendly)."""
+
+    if not FRONTEND_INDEX.exists():
+        raise HTTPException(
+            status_code=503,
+            detail="Frontend build not found. Run `pnpm install && pnpm build` in frontend/ to enable /ui.",
+        )
+
+    return HTMLResponse(FRONTEND_INDEX.read_text(encoding="utf-8"))
 
 
 @app.get("/upload")

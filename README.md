@@ -53,6 +53,8 @@ pnpm install
 pnpm dev
 ```
 
+After building the frontend (`pnpm build`), the bundled UI is served by Uvicorn at http://localhost:8000/ui (with assets under /assets).
+
 ## Testing
 
 Run unit and API integration tests:
