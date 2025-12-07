@@ -31,6 +31,11 @@ class Invoices(Base):
     order_number: Mapped[Optional[str]] = mapped_column(String)
     vendor_name: Mapped[Optional[str]] = mapped_column(String)
     customer_name: Mapped[Optional[str]] = mapped_column(String)
+    billing_period_start: Mapped[Optional[date]] = mapped_column(Date)
+    billing_period_end: Mapped[Optional[date]] = mapped_column(Date)
+    due_date: Mapped[Optional[date]] = mapped_column(Date)
+    currency: Mapped[Optional[str]] = mapped_column(String(3))
+    payment_terms: Mapped[Optional[str]] = mapped_column(String)
     subtotal: Mapped[Optional[float]] = mapped_column(Float)
     tax: Mapped[Optional[float]] = mapped_column(Float)
     freight: Mapped[Optional[float]] = mapped_column(Float)
@@ -44,6 +49,7 @@ class Invoices(Base):
     charges: Mapped[List[Charges]] = relationship("Charges", back_populates="invoice", cascade="all, delete-orphan")
     allocations: Mapped[List[GLAllocations]] = relationship("GLAllocations", back_populates="invoice", cascade="all, delete-orphan")
     shipments: Mapped[List[Shipments]] = relationship("Shipments", back_populates="invoice", cascade="all, delete-orphan")
+    orders: Mapped[List[OrderReferences]] = relationship("OrderReferences", back_populates="invoice", cascade="all, delete-orphan")
     file: Mapped[Optional[Files]] = relationship("Files", back_populates="invoice", uselist=False)
 
 
@@ -77,15 +83,21 @@ class InvoiceLines(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     invoice_id: Mapped[int] = mapped_column(ForeignKey("invoices.id"))
+    order_reference_id: Mapped[Optional[int]] = mapped_column(ForeignKey("order_references.id"))
     part_id: Mapped[Optional[int]] = mapped_column(ForeignKey("parts.id"))
     part_number: Mapped[str] = mapped_column(String)
     description: Mapped[Optional[str]] = mapped_column(String)
     quantity: Mapped[Optional[int]] = mapped_column(Integer)
     unit_cost: Mapped[Optional[float]] = mapped_column(Float)
+    list_price: Mapped[Optional[float]] = mapped_column(Float)
+    net_price: Mapped[Optional[float]] = mapped_column(Float)
+    discount_percent: Mapped[Optional[float]] = mapped_column(Float)
     extended_cost: Mapped[Optional[float]] = mapped_column(Float)
+    uom: Mapped[Optional[str]] = mapped_column(String)
 
     invoice: Mapped[Invoices] = relationship("Invoices", back_populates="lines")
     part: Mapped[Optional[Parts]] = relationship("Parts", back_populates="lines")
+    order_reference: Mapped[Optional[OrderReferences]] = relationship("OrderReferences", back_populates="lines")
 
 
 class Shipments(Base):
@@ -118,5 +130,34 @@ class GLAllocations(Base):
     account_code: Mapped[str] = mapped_column(String)
     amount: Mapped[float] = mapped_column(Float)
     memo: Mapped[Optional[str]] = mapped_column(String)
+    account_description: Mapped[Optional[str]] = mapped_column(String)
+    cost_center: Mapped[Optional[str]] = mapped_column(String)
+    department: Mapped[Optional[str]] = mapped_column(String)
+    internal_account_code: Mapped[Optional[str]] = mapped_column(String)
 
     invoice: Mapped[Invoices] = relationship("Invoices", back_populates="allocations")
+
+
+class AccountMappings(Base):
+    __tablename__ = "account_mappings"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    vendor_name: Mapped[Optional[str]] = mapped_column(String)
+    vendor_account_code: Mapped[str] = mapped_column(String, index=True)
+    internal_account_code: Mapped[str] = mapped_column(String, index=True)
+    effective_date: Mapped[Optional[date]] = mapped_column(Date)
+    notes: Mapped[Optional[str]] = mapped_column(String)
+
+
+class OrderReferences(Base):
+    __tablename__ = "order_references"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    invoice_id: Mapped[int] = mapped_column(ForeignKey("invoices.id"))
+    order_number: Mapped[str] = mapped_column(String, index=True)
+    order_type: Mapped[Optional[str]] = mapped_column(String)
+    release_number: Mapped[Optional[str]] = mapped_column(String)
+    customer_reference: Mapped[Optional[str]] = mapped_column(String)
+
+    invoice: Mapped[Invoices] = relationship("Invoices", back_populates="orders")
+    lines: Mapped[List[InvoiceLines]] = relationship("InvoiceLines", back_populates="order_reference")
