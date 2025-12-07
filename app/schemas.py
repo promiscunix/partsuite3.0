@@ -13,6 +13,10 @@ class GLAllocation(ORMModel):
     account_code: str
     amount: float
     memo: Optional[str] = None
+    account_description: Optional[str] = None
+    cost_center: Optional[str] = None
+    department: Optional[str] = None
+    internal_account_code: Optional[str] = None
 
 class Charge(ORMModel):
     id: int | None = None
@@ -25,7 +29,12 @@ class InvoiceLine(ORMModel):
     description: Optional[str] = None
     quantity: Optional[int] = None
     unit_cost: Optional[float] = None
+    list_price: Optional[float] = None
+    net_price: Optional[float] = None
+    discount_percent: Optional[float] = None
     extended_cost: Optional[float] = None
+    uom: Optional[str] = None
+    order_reference_id: Optional[int] = None
     part_id: Optional[int] = None
 
 class InvoicePage(ORMModel):
@@ -40,6 +49,11 @@ class Invoice(ORMModel):
     order_number: Optional[str] = None
     vendor_name: Optional[str] = None
     customer_name: Optional[str] = None
+    billing_period_start: Optional[date] = None
+    billing_period_end: Optional[date] = None
+    due_date: Optional[date] = None
+    currency: Optional[str] = None
+    payment_terms: Optional[str] = None
     subtotal: Optional[float] = None
     tax: Optional[float] = None
     freight: Optional[float] = None
@@ -50,6 +64,24 @@ class Invoice(ORMModel):
     lines: List[InvoiceLine] = Field(default_factory=list)
     charges: List[Charge] = Field(default_factory=list)
     allocations: List[GLAllocation] = Field(default_factory=list)
+    orders: List["OrderReference"] = Field(default_factory=list)
+
+
+class OrderReference(ORMModel):
+    id: int | None = None
+    order_number: str
+    order_type: Optional[str] = None
+    release_number: Optional[str] = None
+    customer_reference: Optional[str] = None
+
+
+class AccountMapping(ORMModel):
+    id: int | None = None
+    vendor_name: Optional[str] = None
+    vendor_account_code: str
+    internal_account_code: str
+    effective_date: Optional[date] = None
+    notes: Optional[str] = None
 
 class FileRecord(ORMModel):
     id: int
