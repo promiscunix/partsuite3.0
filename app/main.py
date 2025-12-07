@@ -40,15 +40,104 @@ def upload_files(files: List[UploadFile] = File(...), db: Session = Depends(get_
     return results
 
 
-@app.get("/")
-def root() -> dict[str, str]:
-    """Basic landing endpoint to indicate the API is running."""
+@app.get("/", response_class=HTMLResponse)
+def root() -> str:
+    """Friendly landing page to confirm the API is online."""
 
-    return {
-        "message": "Invoice Parser API is running. Use POST /upload to submit files.",
-        "docs": "/docs",
-        "ui": "/upload-ui",
-    }
+    return """
+    <!DOCTYPE html>
+    <html lang=\"en\">
+      <head>
+        <meta charset=\"UTF-8\" />
+        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />
+        <title>Invoice Parser API</title>
+        <style>
+          :root {
+            color: #241829;
+            background: #f7f2ff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          }
+          body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 36px 18px;
+          }
+          .panel {
+            max-width: 820px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 32px;
+            box-shadow: 0 18px 55px rgba(36, 24, 41, 0.08);
+            border: 1px solid #e4d6ff;
+          }
+          h1 {
+            margin: 0 0 6px;
+            font-size: 30px;
+            letter-spacing: -0.02em;
+          }
+          p {
+            margin: 0 0 18px;
+            color: #554364;
+          }
+          .links {
+            display: grid;
+            gap: 10px;
+            margin-top: 14px;
+          }
+          a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 14px;
+            text-decoration: none;
+            color: #321f52;
+            background: linear-gradient(90deg, rgba(210, 177, 255, 0.25), rgba(255, 214, 153, 0.2));
+            border-radius: 12px;
+            border: 1px solid rgba(96, 54, 142, 0.2);
+            font-weight: 600;
+          }
+          a:hover {
+            border-color: #60368e;
+          }
+          .pill {
+            background: #f6f0ff;
+            border: 1px solid #e5d4ff;
+            color: #5d3c87;
+            padding: 8px 12px;
+            border-radius: 999px;
+            display: inline-block;
+            font-size: 14px;
+            margin-top: 6px;
+          }
+          ul {
+            margin: 12px 0 0;
+            padding-left: 18px;
+            color: #61526c;
+          }
+        </style>
+      </head>
+      <body>
+        <main class=\"panel\">
+          <p class=\"pill\">FastAPI • Invoice Parser</p>
+          <h1>API is running</h1>
+          <p>Upload PDFs to extract invoice details or open the React UI to review parsed results.</p>
+          <div class=\"links\">
+            <a href=\"/upload-ui\">Upload PDFs in your browser</a>
+            <a href=\"/docs\">Explore interactive API docs</a>
+            <a href=\"/upload\">POST /upload endpoint details</a>
+            <a href=\"/invoices\">See parsed invoices</a>
+          </div>
+          <ul>
+            <li>Use <strong>POST /upload</strong> with multipart form data to submit one or more PDF invoices.</li>
+            <li>Re-run parsing for stored files with <strong>POST /parse/trigger</strong>.</li>
+            <li>Use the Vite frontend (pnpm dev) for the full landing experience.</li>
+          </ul>
+        </main>
+      </body>
+    </html>
+    """
 
 
 @app.get("/upload")
